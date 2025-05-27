@@ -1,51 +1,53 @@
-import React from "react";
-import { View, Button, Alert, StyleSheet } from "react-native";
-// import { updateSearchCount } from '@service/supabase'; //
+import React, { useState } from "react";
+import { View, Button, Alert, StyleSheet, Image } from "react-native";
+import DocumentScanner from 'react-native-document-scanner-plugin';
 
-import { updateSearchCount } from "@/services/supabase";
+const Saved = () => {
+  const [scannedImage, setScannedImage] = useState<string | null>(null);
 
-const saved = () => {
-  const handleInsert = () => {
-    const mockdata = {
-      id: 1,
-      title: "avanter",
-      adult: true,
-      backdrop_path: "kkk",
-      genre_ids: [1, 2, 3],
-      original_language: "kkk",
-      original_title: "kkk",
-      overview: "kkk",
-      popularity: 1,
-      poster_path: "kkk",
-      release_date: "kkk",
-      video: true,
-      vote_average: 222,
-      vote_count: 333,
-    };
-
+  const handleOpenCamera = async () => {
     try {
-      console.log('button clicked')
-      updateSearchCount("t-search", mockdata);
-      console.log("成功", "已成功插入一条数据");
+      // 启动文档扫描器
+      const { scannedImages } = await DocumentScanner.scanDocument({
+        croppedImageQuality: 100, // 设置裁剪后的图片质量
+      });
+    
+      // 检查是否成功扫描到图片
+      if (scannedImages && scannedImages.length > 0) {
+        setScannedImage(scannedImages[0]);
+      }
     } catch (error) {
-      console.log("错误", "插入失败，请检查控制台日志");
+      Alert.alert('错误', '扫描过程中出现错误');
       console.error(error);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Button title="插入00数据" onPress={handleInsert} />
+      <Button title="扫描收据" onPress={handleOpenCamera} />
+      {scannedImage && (
+        <Image
+          source={{ uri: scannedImage }}
+          style={styles.previewImage}
+          resizeMode="contain"
+        />
+      )}
     </View>
   );
 };
 
-export default saved;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
+    padding: 20,
+  },
+  previewImage: {
+    width: '100%',
+    height: 400,
+    marginTop: 20,
   },
 });
+
+export default Saved;
+

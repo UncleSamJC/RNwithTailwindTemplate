@@ -8,7 +8,7 @@ import MovieCard from "@/components/MovieCard";
 import { images } from "@/constants/images";
 import { Image, ActivityIndicator } from "react-native";
 import { useEffect, useRef } from "react";
-import { updateSearchCount } from "@/services/supabase";
+// import { updateSearchCount } from "@/services/supabase";
 
 const Search = () => {
 
@@ -36,12 +36,12 @@ const Search = () => {
 	}, [searchQuery]);
 
 
-  useEffect(() => {
-		// Call updateSearchCount only if there are results
-		if (movies?.length! > 0 && movies?.[0]) {
-			updateSearchCount(searchQuery, movies[0]);
-		}
-	}, [movies]);
+  // useEffect(() => {
+	// 	// Call updateSearchCount only if there are results
+	// 	if (movies?.length! > 0 && movies?.[0]) {
+	// 		updateSearchCount(searchQuery, movies[0]);
+	// 	}
+	// }, [movies]);
 
   return (
     <View className="flex-1 bg-primary">
